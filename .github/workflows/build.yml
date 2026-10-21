@@ -1,0 +1,51 @@
+name: Build SKSE Plugin
+
+on:
+  workflow_dispatch:
+
+env:
+  MOD_NAME: MOD    
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    strategy:
+      matrix:
+        runtime: [AE, SE]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup XMake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+          build-cache: true
+          package-cache: true
+          build-cache-key: windows-ci-${{ hashFiles('xmake.lua', 'src/**') }}
+          package-cache-key: windows-ci-${{ hashFiles('xmake.lua') }}
+
+      - name: Configure
+        shell: pwsh
+        run: |
+          if ("${{ matrix.runtime }}" -eq "AE") {
+            xmake f -m releasedbg --skyrim_ae=true -y
+          } else {
+            xmake f -m releasedbg --skyrim_ae=false -y
+          }
+
+      - name: Build
+        run: xmake
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.MOD_NAME }}-${{ matrix.runtime }}
+          path: Distr/${{ matrix.runtime }}

@@ -1,0 +1,19 @@
+[mod]
+# name = "newtesting"  # optional: override folder name (defaults to folder name)
+target = "ae"      # ae | se | ship
+output = "distr"   # distr | build
+
+[sync]
+# Extra dirs to exclude when syncing source to VM
+exclude_dirs = ["docs"]
+# Extra files to exclude when syncing source to VM
+exclude_files = ["*.png", "*.webp", ".jpeg"]
+
+[package]
+# Folders from project root to include in MO2 output
+# e.g. ["Data"] will copy Data/meshes, Data/scripts etc into the output root
+data_dirs = []
+# File patterns to copy from build output (default: dll + pdb)
+plugin_files = ["*.dll", "*.pdb", "*.toml"]
+# Patterns to strip from MO2 output after copying (removes headers, lib files)
+output_exclude = ["include", "lib", "*.lib", "*.h", "*.hpp", "commonlib*"]

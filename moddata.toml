@@ -1,0 +1,8 @@
+name = "PLACEHOLDER"
+license = "PLACEHOLDER"
+workflowname = "PLACEHOLDER"
+modversion = "1.0.0"
+
+
+[configs]
+#use-fui = true

@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "VM: build AE",
+      "type": "shell",
+      "command": "build-mod",
+      "args": ["${workspaceFolderBasename}", "--target", "ae"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "VM: build SE",
+      "type": "shell",
+      "command": "build-mod",
+      "args": ["${workspaceFolderBasename}", "--target", "se"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "VM: ship release",
+      "type": "shell",
+      "command": "build-mod",
+      "args": ["${workspaceFolderBasename}", "--target", "ship"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "VM: build clean",
+      "type": "shell",
+      "command": "build-mod",
+      "args": ["${workspaceFolderBasename}", "--clean"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    }
+  ]
+}
