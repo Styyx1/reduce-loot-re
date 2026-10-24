@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  MOD_NAME: MOD    
+  MOD_NAME: styyx-reduce-loot    
 
 jobs:
   build:

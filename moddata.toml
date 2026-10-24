@@ -1,8 +1,7 @@
-name = "PLACEHOLDER"
-license = "PLACEHOLDER"
-workflowname = "PLACEHOLDER"
-modversion = "1.0.0"
-
+name = "styyx-reduce-loot"
+description = "reduces loot gained"
+modversion = "2.1.0"
 
 [configs]
-#use-fui = true
+commonlib_toml = true
+use-fui = true

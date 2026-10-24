@@ -1,20 +1,15 @@
--- set required xmake version
-set_xmakever("2.8.2")
-
--- includes (need xmake.lua file in the same directory)
-includes("lib/commonlibsse")
-includes("extern/styyx-utils")
-
--- set up for project
-
-local mod_name = "MOD"
-
-set_project(mod_name)
-set_version("1.0.0")
-set_license("MIT")
-
--- language and warnings
-set_languages("c++23")
+if is_plat("windows") then
+    add_cxxflags("cl::/std:c++23preview", {force = true})
+else
+    set_languages("c++23")
+end
+includes("lib/commonlibsse", "extern/styyx-utils")
+local MOD_NAME = "styyx-reduce-loot"
+local MOD_VERSION = "2.1.0"
+local MOD_DESC = "reduces loot gained"
+set_project(MOD_NAME)
+set_version(MOD_VERSION)
+set_license("proprietary")
 set_warnings("allextra")
 
 -- xmake rules
@@ -25,14 +20,17 @@ add_rules("plugin.vsxmake.autoupdate")
 includes("xmake-rules.lua")
 
 -- commonlib options
-set_config("skyrim_ae",true)
+if get_config("skyrim_ae") == nil then
+    set_config("skyrim_ae", true)
+end
 set_config("rex_toml", true)
 set_config("use-hook-utils", true)
---{{ADDITIONAL CONFIGS}}--
+set_config("use-fui", true)
+
 
 
 -- add plugin target
-target(mod_name)
+target(MOD_NAME)
     add_deps("commonlibsse", {public = true})
     add_deps("styyx-util", {public = true})
 
@@ -43,9 +41,9 @@ target(mod_name)
     end
 
     add_rules("skse-template.plugin", {
-        name = mod_name,
+        name = MOD_NAME,
         author = "styyx",
-        description = "A plugin template for commonlibsse."
+        description = MOD_DESC
     })
 
     if has_config("skyrim_ae") then
@@ -58,18 +56,6 @@ target(mod_name)
     add_headerfiles("src/**.h")
     add_includedirs("src")
     set_pcxxheader("src/pch.h")
-
-    after_build(function(target)
-        local dist_root = path.join(os.projectdir(), "Distr")
-        local runtime   = has_config("skyrim_ae") and "AE" or "SE"
-        local plugins   = path.join(dist_root, runtime, "SKSE", "Plugins")
-        os.mkdir(plugins)
-        os.trycp(target:targetfile(), plugins)
-        os.trycp(target:symbolfile(), plugins)
-        os.trycp("$(projectdir)/release/**.toml",  plugins)
-        os.trycp("$(projectdir)/release/**.json",  plugins)
-    end)
-
 
 -- builds both game versions. use with ``xmake shiprelease``
 -- ship task: builds SE then AE

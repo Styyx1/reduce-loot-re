@@ -2,40 +2,33 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "VM: build AE",
+      "label": "WINE: build mod",
       "type": "shell",
-      "command": "build-mod",
-      "args": ["${workspaceFolderBasename}", "--target", "ae"],
+      "command": "build-wine",
+      "args": ["--release"],
       "group": { "kind": "build", "isDefault": true },
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
+
     {
       "label": "VM: build SE",
       "type": "shell",
-      "command": "build-mod",
-      "args": ["${workspaceFolderBasename}", "--target", "se"],
-      "group": "build",
+      "command": "build-wine",
+      "args": ["--oldrim"],
+      "group": { "kind": "build", "isDefault": false },
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
+
     {
-      "label": "VM: ship release",
+      "label": "VM: build Clean",
       "type": "shell",
-      "command": "build-mod",
-      "args": ["${workspaceFolderBasename}", "--target", "ship"],
-      "group": "build",
+      "command": "build-wine",
+      "args": ["--clean"],
+      "group": { "kind": "build", "isDefault": false },
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
-    {
-      "label": "VM: build clean",
-      "type": "shell",
-      "command": "build-mod",
-      "args": ["${workspaceFolderBasename}", "--clean"],
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    }
   ]
 }

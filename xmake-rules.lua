@@ -85,6 +85,46 @@ END
 rule("skse-template.plugin")
     add_deps("win.sdk.resource")
 
+    after_build(function(target)
+        import("core.project.config")
+
+        local runtime = config.get("skyrim_ae") and "AE" or "SE"
+        local plugins = path.join(os.projectdir(), "Distr", runtime, "SKSE", "Plugins")
+        os.mkdir(plugins)
+
+        os.trycp(target:targetfile(), plugins)
+        os.trycp(target:symbolfile(), plugins)
+
+        local releasedir = path.join(os.projectdir(), "release")
+        for _, pattern in ipairs({ "**.toml", "**.json" }) do
+            for _, file in ipairs(os.files(path.join(releasedir, pattern))) do
+                os.trycp(file, plugins)
+            end
+        end
+    end)
+
+    on_install(function(target)
+        import("core.project.config")
+
+        local mods = os.getenv("XSE_TES5_MODS_PATH")
+        if not mods or mods == "" then
+            raise("XSE_TES5_MODS_PATH is not set")
+        end
+
+        local conf    = target:extraconf("rules", "skse-template.plugin") or {}
+        local runtime = config.get("skyrim_ae") and "AE" or "SE"
+        local src     = path.join(os.projectdir(), "Distr", runtime)
+        local dst     = path.join(mods, conf.name or target:name())
+
+        if not os.isdir(src) then
+            raise("nothing to install, %s does not exist", src)
+        end
+
+        os.mkdir(dst)
+        os.cp(path.join(src, "*"), dst)
+        print("Installed to " .. dst)
+    end)
+
     on_config(function(target)
         import("core.base.semver")
         import("core.project.project")
